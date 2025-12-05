@@ -1,0 +1,130 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-content"></header>
+<main id="main">
+    <section class="p-sm-3" id="video">
+        <div class="container-lg">
+            <div class="ratio ratio-21x9">
+                <iframe allowfullscreen th:src="${content.resourcePath}"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="p-sm-3" id="details">
+        <div class="container-lg">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="row">
+                        <div class="col-6">
+                            <h2 th:text="${content.title}"></h2>
+                        </div>
+                        <div class="col-6 float-end">
+                            <ul class="nav float-end">
+                                <li class="nav-item float-end">
+                                    <div class="btn-group">
+                                        <form method="post"
+                                              th:action="@{/content-detail/{id}/like/{rate}(id=${content.id},rate=${rate})}"
+                                              th:each="rate : ${rates}">
+                                            <button class="btn btn-transparent" name="submit"
+                                                    type="submit">
+                                                <i class="bi bi-hand-thumbs-up-fill h1" th:if="${rate <= rating}"></i>
+                                                <i class="bi bi-hand-thumbs-up h1" th:if="${rate > rating}"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </li>
+                                <li class="nav-item float-end">
+                                    <form method="post"
+                                          th:action="@{/content-detail/{id}/playlist(id=${content.id})}">
+                                        <button class="btn ms-3" name="submit" type="submit">
+                                            <i class="bi bi-node-plus h1" th:if="${!playlist}"></i>
+                                            <i class="bi bi-node-minus-fill h1" th:if="${playlist}"></i>
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
+                    <p th:text="${content.synopsis}"></p>
+                    <hr>
+                    <p class="small text-muted fst-italic bi bi-youtube"
+                       th:text="| #{content.visualization} ${history} #{content.visualization.times}|"></p>
+                </div>
+                <div class="col-lg-1"></div>
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-auto">
+                            <small class="text-muted" th:text="#{content.production}"></small><span>:</span>
+                        </div>
+                        <div class="col-auto"><small th:text="${content.production}"></small></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto">
+                            <small class="text-muted" th:text="#{content.premier}"></small><span>:</span>
+                        </div>
+                        <div class="col-auto"><small th:text="${content.premier}"></small></div>
+                    </div>
+                    <hr>
+                    <div class="row" th:if="${content.directors.size > 0}">
+                        <div class="col-auto">
+                            <small class="text-muted" th:text="#{content.directors}"></small><span>:</span>
+                        </div>
+                        <div class="col-auto">
+                            <div th:each="director : ${content.directors}">
+                                <small th:text="${director.name}"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" th:if="${content.actors.size > 0}">
+                        <div class="col-auto">
+                            <small class="text-muted" th:text="#{content.actors}"></small><span>:</span>
+                        </div>
+                        <div class="col-auto">
+                            <div th:each="actor : ${content.actors}">
+                                <small th:text="${actor.name}"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" th:if="${content.genres.size > 0}">
+                        <div class="col-auto">
+                            <small class="text-muted" th:text="#{content.genres}"></small><span>:</span>
+                        </div>
+                        <div class="col-auto">
+                            <div th:each="genre, iter : ${content.genres}">
+                                <small th:text="${genre.name}"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-auto">
+                            <small class="text-muted" th:text="#{content.feature}"></small><span>:</span>
+                        </div>
+                        <div class="col-auto"><small th:text="${content.feature.name}"></small></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto">
+                            <small class="text-muted" th:text="#{content.type}"></small><span>:</span>
+                        </div>
+                        <div class="col-auto"><small th:text="${content.type.name}"></small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Log out modal -->
+    <div th:replace="fragments/header::modal-logout"></div>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

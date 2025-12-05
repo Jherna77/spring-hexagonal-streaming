@@ -1,0 +1,179 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-default"></header>
+<main id="main">
+    <section class="p-sm-3 bg-gradient-reverse" id="start">
+        <div class="container-lg">
+            <div class="row pt-5">
+                <div class="col-md-12">
+                    <h1 class="text-center py-4" th:text="#{home.title}"></h1>
+                    <h3 class="text-center" th:text="#{home.body}"></h3>
+                    <h5 class="text-center" th:text="#{home.subscribe}"></h5>
+                </div>
+            </div>
+            <form class="row py-5 needs-validation" method="post"
+                  novalidate th:action="@{/}" th:object="${user}">
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <label class="form-label visually-hidden" for="email" th:text="#{user.email}"></label>
+                    <div class="input-group has-validation mb-2">
+                        <span class="input-group-text" id="inputGroupEmail">@</span>
+                        <input aria-describedby="inputGroupEmail" autofocus
+                               class="form-control" id="email" name="email"
+                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                               required th:value="*{email}" type="email">
+                        <div class="invalid-feedback">
+                            <i class="bi-exclamation-circle"></i>
+                            <span th:text="#{sign.up.email}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group pb">
+                    <button class="form-control btn btn-success" id="login-submit" type="submit">
+                        <span th:text="#{btn.start}"></span>
+                        <i class="mx-1 bi bi-arrow-right-circle-fill"></i>
+                    </button>
+                </div>
+                <div class="col-md-2"></div>
+            </form>
+        </div>
+        <div class="mb-5"></div>
+    </section>
+
+    <!-- News -->
+    <section class="p-sm-3 bg-gradient" id="news">
+        <div class="container-fluid">
+            <div class="ms-2 ps-4">
+                <h4 class="px-5" th:text="#{home.news.title}"></h4>
+                <p class="px-5 text-muted" th:text="#{home.news.body}"></p>
+            </div>
+            <div class="carousel carousel-dark slide" id="group">
+                <div class="carousel-inner">
+                    <div th:each="group, iter : ${contents}">
+                        <div class="carousel-item" th:classappend="${iter.first ? 'active' : ''}">
+                            <div class="card-group px-5">
+                                <div class="card card-over" th:each="content : ${group}">
+                                    <img alt="" class="card-img-top img-adjusted" referrerpolicy="no-referrer"
+                                         th:src="${content.cover}">
+                                </div>
+                                <div class="card card-hidden" th:if="${group.size < 2}"></div>
+                                <div class="card card-hidden" th:if="${group.size < 3}"></div>
+                                <div class="card card-hidden" th:if="${group.size < 4}"></div>
+                                <div class="card card-hidden" th:if="${group.size < 5}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" data-bs-slide="prev"
+                        data-bs-target="#group" type="button">
+                    <span aria-hidden="true" class="carousel-control-prev bi bi-arrow-left-circle-fill h1"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" data-bs-slide="next"
+                        data-bs-target="#group" type="button">
+                    <span aria-hidden="true" class="carousel-control-next bi bi-arrow-right-circle-fill h1"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div class="mb-5"></div>
+    </section>
+
+    <!-- Subscriptions -->
+    <section class="p-sm-3 bg-gradient-reverse" id="plan">
+        <div class="container-lg">
+            <div class="row pt-5">
+                <div class="col-md-12">
+                    <h2 class="mt-4 text-center" th:text="#{home.subscriptions.title}"></h2>
+                    <p class="mb-4 text-center text-muted" th:text="#{home.subscriptions.body}"></p>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div class="card col-3 m-4 p-0" th:each="plan : ${plans}">
+                    <div class="card-header bg-gradient">
+                        <span th:text="${plan.name}"/>
+                    </div>
+                    <div class="card-body">
+                        <!-- Tipo de pago y limitación de la suscripción -->
+                        <h5 class="card-title" th:if="${plan.duration == 0}"
+                            th:text="#{plan.freemium.duration}"></h5>
+                        <h5 class="card-title" th:text="#{plan.duration} +' '+ ${plan.duration} +' '+ #{plan.interval}"
+                            th:unless="${plan.duration == 0}"></h5>
+
+                        <!-- Precio -->
+                        <h4 class="card-title" th:if="${plan.duration == 0}"
+                            th:text="#{plan.freemium.price}"></h4>
+                        <h4 class="card-title" th:text="${plan.price} +' '+#{plan.price}"
+                            th:unless="${plan.duration == 0}"></h4>
+
+                        <p class="card-text" th:text="${plan.description}"></p>
+                    </div>
+                    <div class="card-footer bg-gradient-reverse">
+                        <p class="small m-0 p-0" th:text="#{plan.features}"></p>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text small m-0 p-0" th:each="feature: ${plan.features}"
+                           th:text="${feature.name}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subscribe box -->
+    <section class="bg-gradient" id="subscribe">
+        <div class="container-lg">
+            <div class="row">
+                <div class="col-md-12">
+                    <h5 class="text-center mt-3" th:text="#{home.subscribe}"></h5>
+                </div>
+            </div>
+            <form class="row pt-4 needs-validation" method="post"
+                  novalidate th:action="@{/}" th:object="${user}">
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <label class="form-label visually-hidden" for="email" th:text="#{user.email}"></label>
+                    <div class="input-group has-validation mb-2">
+                        <span class="input-group-text" id="inputGroupEmail2">@</span>
+                        <input aria-describedby="inputGroupEmail2" autofocus
+                               class="form-control" id="email2" name="email"
+                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                               required th:value="*{email}" type="email">
+                        <div class="invalid-feedback">
+                            <i class="bi-exclamation-circle"></i>
+                            <span th:text="#{sign.up.email}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group pb">
+                    <button class="form-control btn btn-success" id="login-submit-bottom" type="submit">
+                        <span th:text="#{btn.start}"></span>
+                        <i class="mx-1 bi bi-arrow-right-circle-fill"></i>
+                    </button>
+                </div>
+                <div class="col-md-2"></div>
+            </form>
+        </div>
+        <div class="mb-5"></div>
+    </section>
+    <section class="p-sm-3" id="logo">
+        <div class="row justify-content-center pt-2">
+            <div class="col-md-6 col-md-offset-3 py-3">
+                <img alt="logo" class="mx-auto d-block" height="100" th:src="@{/img/logo.png}"/>
+            </div>
+        </div>
+    </section>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

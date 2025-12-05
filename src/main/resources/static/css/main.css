@@ -1,0 +1,56 @@
+.promo {
+    height: 500px;
+    color: white;
+    background: linear-gradient(to bottom, rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) 20%, rgba(30, 30, 30, 0.5) 80%, rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) 100%),
+        /*bottom image*/ url(../img/bg-main-signup-slim.png) no-repeat;
+    background-size: cover;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #003d6e !important;
+}
+
+.btn-success, .btn-success:hover, .btn-success:active, .btn-success:visited {
+    background-color: #016e69 !important;
+}
+
+.card-over .read-more:hover {
+    font-size: 14px;
+}
+
+.card-over:hover {
+    transform: scale(1.2);
+}
+
+.card-over {
+    transition: .3s;
+    margin: 2rem;
+    border-color: transparent;
+}
+
+.card-hidden {
+    transform: scale(1.2);
+    background: transparent;
+    border: transparent;
+}
+
+.bg-gradient {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0)) !important;
+}
+
+.bg-gradient-reverse {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.06)) !important;
+}
+
+.chart {
+    width: 100%;
+    min-height: 450px;
+}
+
+.row-chart {
+    margin: 0 !important;
+}
+
+.table > tbody > tr > td, .table > thead > tr > th {
+    vertical-align: middle;
+}

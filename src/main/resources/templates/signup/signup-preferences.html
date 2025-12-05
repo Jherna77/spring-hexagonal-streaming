@@ -1,0 +1,77 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-default"></header>
+<main id="main">
+    <section class="p-sm-3" id="preferences">
+        <div class="container-lg">
+            <h2 class="m-4 text-center" th:text="#{sign.up.preferences.title}"></h2>
+            <hr class="mx-3">
+            <div class="text-center text-muted" th:text="#{sign.up.preferences.body}"></div>
+            <form class="needs-validation" method="post" novalidate
+                  th:action="@{/signup-preferences}" th:object="${user}">
+                <div class="card-group m-3">
+                    <div class="card">
+                        <div class="card-header text-center" th:text="#{sign.up.preferences.genres}"></div>
+                        <div class="card-body bg-light-subtle p-0 overflow-y-scroll"
+                             style="--height: 500px; min-height: var(--height); max-height: var(--height);">
+                            <div class="list-group rounded-0" th:each="genre : ${genres}">
+                                <label class="list-group-item border-top-0 border-start-0 border-end-0">
+                                    <input class="form-check-input me-1"
+                                           th:field="${user.selectedGenres}"
+                                           th:text="${genre.name}" th:value="${genre.id}" type="checkbox"/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header text-center" th:text="#{sign.up.preferences.directors}"></div>
+                        <div class="card-body bg-light-subtle p-0 overflow-y-scroll"
+                             style="--height: 500px; min-height: var(--height); max-height: var(--height);">
+                            <div class="list-group rounded-0" th:each="director : ${directors}">
+                                <label class="list-group-item border-top-0 border-start-0 border-end-0">
+                                    <input class="form-check-input me-1"
+                                           th:field="${user.selectedDirectors}"
+                                           th:text="${director.name}" th:value="${director.id}" type="checkbox"/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header text-center" th:text="#{sign.up.preferences.actors}"></div>
+                        <div class="card-body bg-light-subtle p-0 overflow-y-scroll"
+                             style="--height: 500px; min-height: var(--height); max-height: var(--height);">
+                            <div class="list-group rounded-0" th:each="actor : ${actors}">
+                                <label class="list-group-item border-top-0 border-start-0 border-end-0">
+                                    <input class="form-check-input me-1"
+                                           th:field="${user.selectedActors}"
+                                           th:text="${actor.name}" th:value="${actor.id}" type="checkbox"/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 m-2">
+                    <div class="col-md-6">
+                        <input class="form-control btn btn-outline-secondary" id="previous"
+                               name="previous" th:value="#{btn.return}" type="submit"/>
+                    </div>
+                    <div class="col-md-6">
+                        <input class="form-control btn btn-success" id="submit"
+                               name="submit" th:value="#{btn.continue}" type="submit"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

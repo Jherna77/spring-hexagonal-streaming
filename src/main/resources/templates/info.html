@@ -1,0 +1,103 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-default"></header>
+<main id="main">
+    <!-- Términos y condiciones -->
+    <section class="p-sm-3 bg-gradient-reverse" id="terms">
+        <div class="container-lg mt-5 mb-5 pt-5 pb-5">
+            <h1><strong th:text="#{info.terms.title}"/></h1>
+            <hr>
+            <p class="lead" th:text="#{info.terms.header}"></p>
+            <p class="text" th:text="#{info.terms.intro}"></p>
+
+            <!-- Controles administrativos -->
+            <h4 class="text"><strong th:text="#{info.terms.admin.title}"/></h4>
+            <p class="text" th:text="#{info.terms.admin.account}">
+            <ul>
+                <li><strong th:text="#{info.terms.admin.account.bot.title}"/></li>
+                <p th:text="#{info.terms.admin.account.bot.description}"></p>
+                <li><strong th:text="#{info.terms.admin.account.protection.title}"/></li>
+                <p th:text="#{info.terms.admin.account.protection.description}"></p>
+                <li><strong th:text="#{info.terms.admin.account.session.title}"/></li>
+                <p th:text="#{info.terms.admin.account.session.description}"></p>
+                <li><strong th:text="#{info.terms.admin.account.email.title}"></strong></li>
+                <p th:text="#{info.terms.admin.account.email.description}"></p>
+                <li><strong th:text="#{info.terms.admin.account.free.title}"/></li>
+            </ul>
+            </p>
+            <p th:text="#{info.terms.admin.account.resolution}"></p>
+
+            <!-- Suscripciones -->
+            <h4><strong th:text="#{info.terms.subscriptions.title}"/></h4>
+            <p class="text-justify" th:text="#{info.terms.subscriptions.body}"></p>
+            <p class="text-justify" th:text="#{info.terms.subscriptions.cancel}"></p>
+            <p th:text="#{info.terms.subscriptions.renewal}"></p>
+            <p class="text-justify"><strong th:text="#{info.terms.subscriptions.payment}"/></p>
+        </div>
+    </section>
+    
+    <!-- Política de privacidad -->
+    <section class="p-sm-3  bg-gradient-reverse pb-5" id="privacy">
+        <div class="container-lg mt-5 pt-5 pb-5">
+            <h1><strong th:text="#{info.privacy.title}"/></h1>
+            <hr>
+            <p class="lead" th:text="#{info.privacy.header}"></p>
+            <p class="text-justify" th:text="#{info.privacy.intro}"></p>
+            <p class="text-justify" th:text="#{info.privacy.body}"></p>
+            <p th:text="#{info.privacy.items}">
+            <ul>
+                <li><strong th:text="#{info.privacy.items.data.title}"/></li>
+                <p th:text="#{info.privacy.items.data.description}"></p>
+                <li><strong th:text="#{info.privacy.items.ratings.title}"/></li>
+                <p th:text="#{info.privacy.items.ratings.description}"></p>
+                <li><strong th:text="#{info.privacy.items.payment.title}"/></li>
+                <p th:text="#{info.privacy.items.payment.description}"></p>
+                <li><strong th:text="#{info.privacy.items.profile.title}"/></li>
+                <p th:text="#{info.privacy.items.profile.description}"></p>
+            </ul>
+            </p>
+        </div>
+    </section>
+
+    <!-- Sobre LSI MAX... -->
+    <section class="p-sm-5 bg-gradient-reverse" id="about">
+        <div class="container mt-3 pt-5 pb-5">
+            <h1><strong th:text="#{info.about.title}"/></h1>
+            <hr>
+            <p class="lead" th:text="#{info.about.authors}"/>
+            <ul>
+                <li th:text="#{info.about.jorge}"></li>
+            </ul>
+            <p class="lead" th:text="#{info.about.resources}"/>
+            <ul>
+                <li ><a th:text="#{info.resource.c4.context}"
+                        th:href="@{/doc/c4/tw-level-1.drawio}" target="_blank"></a></li>
+                <li ><a th:text="#{info.resource.c4.containers}"
+                        th:href="@{/doc/c4/tw-level-2.drawio}" target="_blank"></a></li>
+                <li ><a th:text="#{info.resource.c4.components}"
+                        th:href="@{/doc/c4/tw-level-3.drawio}" target="_blank"></a></li>
+                <li ><a th:text="#{info.resource.c4.sources}"
+                        th:href="@{/doc/c4/tw-level-4.png}" target="_blank"></a></li>
+                <li ><a th:text="#{info.resource.c4.sources.users}"
+                        th:href="@{/doc/c4/tw-level-4-users.png}" target="_blank"></a></li>
+                <li ><a th:text="#{info.resource.db.er.diagram}"
+                        th:href="@{/doc/db/ER-diagram.png}" target="_blank"></a></li>
+            </ul>
+        </div>
+
+        <div class="row justify-content-center pt-2">
+            <div class="col-md-6 col-md-offset-3 py-3">
+                <img alt="logo" class="mx-auto d-block" height="100" th:src="@{/img/logo.png}"/>
+            </div>
+        </div>
+    </section>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+
+</html>

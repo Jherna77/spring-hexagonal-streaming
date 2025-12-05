@@ -1,0 +1,57 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-default"></header>
+<main id="main">
+    <section class="p-sm-3" id="plan">
+        <div class="container-lg">
+            <h2 class="m-4 text-center" th:text="#{sign.up.plans.title}"></h2>
+            <form class="needs-validation" method="post" novalidate
+                  th:action="@{/signup-plan/{id}(id=${plan.id})}" th:each="plan : ${plans}" th:object="${user}">
+                <div class="card m-3">
+                    <div class="card-header">
+                        <span th:text="${plan.name}"/>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Tipo de pago y limitación de la subscripción -->
+                        <h5 class="card-title" th:if="${plan.duration == 0}"
+                            th:text="#{plan.freemium.duration}"></h5>
+                        <h5 class="card-title" th:text="#{plan.duration} +' '+ ${plan.duration} +' '+ #{plan.interval}"
+                            th:unless="${plan.duration == 0}"></h5>
+
+                        <!-- Precio -->
+                        <h4 class="card-title" th:if="${plan.duration == 0}"
+                            th:text="#{plan.freemium.price}"></h4>
+                        <h4 class="card-title" th:text="${plan.price} +' '+#{plan.price}"
+                            th:unless="${plan.duration == 0}"></h4>
+
+                        <p class="card-text" th:text="${plan.description}"></p>
+
+                        <button class="form-control btn btn-success" id="submit" th:text="#{btn.create.account}"
+                                type="submit" value="plan"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="container-lg">
+            <div class="m-3">
+                <div class="col-md-12">
+                    <form method="get" novalidate th:action="@{/signup-preferences}">
+                        <input class="form-control btn btn-outline-light" id="return" name="return"
+                               th:value="#{btn.back}" type="submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

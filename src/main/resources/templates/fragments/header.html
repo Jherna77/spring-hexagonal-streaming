@@ -1,0 +1,119 @@
+<html data-bs-theme="dark" lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header-css">
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link rel="icon" th:href="@{/img/icon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/bootstrap-icons/bootstrap-icons.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}" type="text/css"/>
+    <script src="https://www.gstatic.com/charts/loader.js" type="text/javascript"></script>
+    <title th:text="#{app.title}"></title>
+</head>
+<body>
+<header class="header sticky-top p-3 bg-dark-subtle text-white" id="header" th:fragment="header-default">
+    <div class="container-fluid px-sm-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a th:href="@{/}"><img alt="" class="logo" height="50" th:src="@{/img/logo.png}"/></a>
+            <span class=" me-sm-auto"></span>
+
+            <div class="text-end">
+                <a class="btn btn-outline-light me-2" sec:authorize="!isAuthenticated()"
+                   th:href="@{/signin}" type="button">
+                    <span th:text="#{btn.sign.in}"></span>
+                    <i class="mx-1 bi bi-person-fill"></i>
+                </a>
+                <a class="btn btn-success" sec:authorize="!isAuthenticated()"
+                   th:href="@{/signup}" type="button">
+                    <span th:text="#{btn.sign.up}"></span>
+                    <i class="mx-1 bi bi-youtube"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+<header class="header sticky-top p-3 bg-dark text-white" id="header-content" th:fragment="header-content">
+    <div class="container-fluid px-sm-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a th:href="@{/}"><img alt="" class="logo" height="50" th:src="@{/img/logo.png}"/></a>
+            <div class="me-4"></div>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li th:each="type : ${types}">
+                    <a class="nav-link px-2 text-white" th:href="@{/content-type/{id}(id=${type.id})}"
+                       th:text="#{${type.tag}}"></a>
+                </li>
+            </ul>
+
+            <div class="text-end">
+                <a class="btn btn-primary" th:href="@{/user-details}" type="button">
+                    <span th:text="#{btn.profile}"></span>
+                    <i class="mx-1 bi bi-person-fill"></i>
+                </a>
+                <a class="btn btn-success mx-1" th:href="@{/user-subscription}" type="button">
+                    <span th:text="#{btn.subscription}"></span>
+                    <i class="mx-1 bi bi-youtube"></i>
+                </a>
+                <a class="btn btn-outline-light" data-bs-target="#modal-logOut"
+                   data-bs-toggle="modal" type="button">
+                    <span th:text="#{btn.sign.out}"></span>
+                    <i class="mx-1 bi bi-x-lg"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+<header class="header sticky-top p-3 bg-dark text-white" id="header-admin" th:fragment="header-admin">
+    <div class="container-fluid px-sm-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a th:href="@{/}"><img alt="" class="logo" height="50" th:src="@{/img/logo.png}"/></a>
+            <div class="me-4"></div>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a class="nav-link px-2 text-white" th:href="@{/admin-statistics}"
+                       th:text="#{app.statistics}"></a></li>
+                <li><a class="nav-link px-2 text-white" th:href="@{/admin-contents}"
+                       th:text="#{app.contents}"></a></li>
+
+                <li sec:authorize="hasAuthority('ADMIN')">
+                    <a class="nav-link px-2 text-white" th:href="@{/admin-users}" th:text="#{app.users}"></a></li>
+                <li sec:authorize="hasAuthority('ADMIN')">
+                    <a class="nav-link px-2 text-white" th:href="@{/admin-tools}" th:text="#{app.admin}"></a></li>
+            </ul>
+
+            <div class="text-end">
+                <a class="btn btn-outline-light" data-bs-target="#modal-logOut"
+                   data-bs-toggle="modal" type="button">
+                    <span th:text="#{btn.sign.out}"></span>
+                    <i class="mx-1 bi bi-x-lg"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+<main>
+    <!-- Log out modal -->
+    <div aria-hidden="true" aria-labelledby="logOutModalLabel" class="modal fade" data-bs-keyboard="true"
+         id="modal-logOut" keybo tabindex="-1" th:fragment="modal-logout">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logOutModalLabel" th:text="#{modal.log.out.title}"></h5>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body">
+                    <p th:text="#{modal.log.out.info}"></p>
+                    <p th:text="#{modal.log.out.body}"></p>
+                    <div class="modal-footer">
+                        <form method="post" th:action="@{/logout}">
+                            <button class="btn btn-success" th:text="#{btn.confirm}" type="submit"/>
+                        </form>
+                        <button class="btn btn-outline-light" data-bs-dismiss="modal" th:text="#{btn.cancel}"
+                                type="button"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

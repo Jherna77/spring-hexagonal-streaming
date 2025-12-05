@@ -1,0 +1,41 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{bootstrap/css/bootstrap.min.css}" type="text/css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body>
+<footer class="sticky-bottom mt-auto d-flex flex-wrap justify-content-between px-md-4 border-top bg-body"
+        id="footer" th:fragment="footer">
+    <ul class="nav col-sm-3">
+        <li class="nav-item">
+            <a class="nav-link px-2" th:href="@{/}"><img alt="" class="logo" height="18" th:src="@{/img/icon.ico}"/></a>
+        </li>
+        <li class="nav-item">
+            <small class="nav-link px-2 text-body-secondary" style="font-size: 0.8em;"
+                   th:text="#{app.copy} +' '+ #{app.title}"></small>
+        </li>
+    </ul>
+
+    <ul class="nav col-sm-9 justify-content-end">
+        <li class="nav-item">
+            <a class="nav-link px-2 text-body-secondary" style="font-size: 0.8em;" target="_blank"
+               th:href="@{/doc/javadoc/index.html}" th:text="#{footer.javadoc}"></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link px-2 text-body-secondary" style="font-size: 0.8em;"
+               th:href="@{/resources/info#terms}" th:text="#{info.terms.title}"></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link px-2 text-body-secondary" style="font-size: 0.8em;"
+               th:href="@{/resources/info#privacy}" th:text="#{info.privacy.title}"></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link px-2 text-body-secondary" style="font-size: 0.8em;"
+               th:href="@{/resources/info#about}" th:text="#{info.about.title}"></a>
+        </li>
+    </ul>
+</footer>
+</body>
+</html>

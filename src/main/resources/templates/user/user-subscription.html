@@ -1,0 +1,177 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-content"></header>
+<main id="main">
+    <section class="p-sm-3" id="plan">
+        <div class="container-lg">
+            <h2 class="m-4 text-center" th:text="#{user.subscriptions.title}"></h2>
+
+            <!-- Subscriptión updated successfully -->
+            <div th:if="${param.success}">
+                <div class="m-3 alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="#{user.subscriptions.update.success}"/>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+                </div>
+            </div>
+
+            <!-- Subscriptión canceled successfully -->
+            <div th:if="${param.canceled}">
+                <div class="m-3 alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="#{user.subscriptions.update.success}"/>
+                    <hr>
+                    <span th:text="#{user.subscriptions.update.bye}"/>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+                </div>
+            </div>
+
+            <form class="needs-validation" method="post" novalidate
+                  th:action="@{/user-subscription/{id}(id=${plan.id})}" th:each="plan : ${plans}" th:object="${user}">
+
+                <div class="card m-3"
+                     th:classappend="${subscription.plan.id == plan.id ? 'border-success border-2' : ''}">
+                    <div class="card-header"
+                         th:classappend="${subscription.plan.id == plan.id ? 'bg-success' : (plan.duration == 0 ? 'bg-dark-subtle text-muted' : '')}">
+                        <i class="bi bi-ticket-fill" th:if="${subscription.plan.id == plan.id}"></i>
+                        <span th:text="${plan.name}"/>
+                    </div>
+                    <div class="card-body"
+                         th:classappend="${subscription.plan.id != plan.id and plan.duration == 0 ? 'text-muted' : ''}">
+
+                        <!-- Tipo de pago y limitación de la subscripción -->
+                        <h5 class="card-title" th:if="${plan.duration == 0}"
+                            th:text="#{plan.freemium.duration}"></h5>
+                        <h5 class="card-title" th:text="#{plan.duration} +' '+ ${plan.duration} +' '+ #{plan.interval}"
+                            th:unless="${plan.duration == 0}"></h5>
+                        <!--h5 class="card-title" th:unless="${plan.duration == 0}">
+                                Suscripción de [[|${plan.duration}|]] meses</h5-->
+
+                        <!-- Precio -->
+                        <h4 class="card-title" th:if="${plan.duration == 0}"
+                            th:text="#{plan.freemium.price}"></h4>
+                        <h4 class="card-title" th:text="${plan.price} +' '+#{plan.price}"
+                            th:unless="${plan.duration == 0}"></h4>
+                        <!--h4 class="card-title" th:unless="${plan.duration == 0}">[[|${plan.price}|]] €/Mes</h4-->
+
+                        <!-- Duración -->
+                        <h4 class="card-title text-success-emphasis"
+                            th:if="${subscription.plan.id == plan.id and plan.duration == 0}"
+                            th:text="#{plan.active.from} +' '+
+                                     ${#temporals.format(subscription.start, 'dd-MM-yyyy')}"></h4>
+                        <!--h4 class="card-title text-success-emphasis"
+                                     th:if="${subscription.plan.id == plan.id and plan.duration == 0}">
+                                     Activo desde el [[|${#temporals.format(subscription.start, 'dd-MM-yyyy')}|]]
+                        </h4-->
+
+                        <h4 class="card-title text-success-emphasis"
+                            th:if="${subscription.plan.id == plan.id and plan.duration > 0}"
+                            th:text="#{plan.active.from} +' '+
+                                     ${#temporals.format(subscription.start, 'dd-MM-yyyy')} +' '+
+                                     #{plan.active.to} +' '+
+                                     ${#temporals.format(subscription.finish, 'dd-MM-yyyy')}"></h4>
+                        <!--h4 class="card-title text-success-emphasis"
+                                     th:if="${subscription.plan.id == plan.id and plan.duration > 0}">
+                                     Activo desde el [[|${#temporals.format(subscription.start, 'dd-MM-yyyy')}|]]
+                                     al [[|${#temporals.format(subscription.finish, 'dd-MM-yyyy')}|]]
+                        </h4-->
+
+                        <!-- Descripción -->
+                        <p class="card-text" th:text="${plan.description}"></p>
+
+                        <!-- Botones de activación y cancelación -->
+                        <button class="form-control btn btn-success" id="submit" name="submit"
+                                th:hidden="${subscription.plan.id == plan.id}" th:text="#{btn.activate.subscription}"
+                                th:unless="${plan.duration == 0}" type="submit" value="plan"/>
+                        <!--<button class="form-control btn btn-danger" id="cancel" name="cancel"
+                                th:hidden="${subscription.plan.id != plan.id}" th:text="#{btn.cancel.subscription}"
+                                th:unless="${plan.duration == 0}" type="submit"/>-->
+
+                        <!-- Botones de activación y cancelación -->
+                        <!--button class="form-control btn btn-success"
+                                data-bs-target="#modal-change" data-bs-toggle="modal" id="btn-submit"
+                                th:hidden="${subscription.plan.id == plan.id}" th:text="#{btn.activate.subscription}"
+                                th:unless="${plan.duration == 0}" type="button"/-->
+                        <button class="form-control btn btn-danger"
+                                data-bs-target="#modal-cancel" data-bs-toggle="modal" id="btn-cancel"
+                                th:hidden="${subscription.plan.id != plan.id}" th:text="#{btn.cancel.subscription}"
+                                th:unless="${plan.duration == 0}" type="button"/>
+
+                        <!-- Change subscription modal -->
+                        <!--div aria-hidden="true" aria-labelledby="confirmLabel" class="modal fade"
+                             data-bs-backdrop="static" data-bs-keyboard="true" id="modal-change" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"
+                                            th:text="#{modal.confirm.subscription.change.title}"></h5>
+                                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                                type="button"/>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p th:text="#{modal.confirm.subscription.change.body}"></p>
+                                        <p th:text="#{modal.confirm.subscription.change.info}"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-success" name="submit" type="submit"
+                                                th:text="#{btn.confirm}"/>
+                                        <button class="btn btn-outline-light" data-bs-dismiss="modal"
+                                                name="dismiss" type="button"
+                                                th:text="#{btn.cancel}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div-->
+
+                        <!-- Cancel subscription modal -->
+                        <div aria-hidden="true" aria-labelledby="cancelLabel" class="modal fade"
+                             data-bs-backdrop="static" data-bs-keyboard="true" id="modal-cancel" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="cancelLabel"
+                                            th:text="#{modal.confirm.subscription.cancellation.title}"></h5>
+                                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                                type="button"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p th:text="#{modal.confirm.subscription.cancellation.body}"></p>
+                                        <p th:text="#{modal.confirm.subscription.cancellation.info}"></p>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-success" name="cancel" th:text="#{btn.confirm}"
+                                                    type="submit"/>
+                                            <button class="btn btn-outline-light" data-bs-dismiss="modal"
+                                                    name="dismiss" th:text="#{btn.cancel}"
+                                                    type="button"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="container-lg">
+            <div class="m-3">
+                <div class="col-md-12">
+                    <a class="form-control btn btn-outline-light" id="return" th:href="@{/}" th:text="#{btn.back}"></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Log out modal -->
+    <div th:replace="fragments/header::modal-logout"></div>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-content"></header>
+<main class="p-sm-3" id="main" sec:authorize="isAuthenticated()">
+    <section class="row" id="title">
+        <div class="jumbotron promo bg-dark px-sm-5">
+            <h1 class="" th:text="#{home.registered.user.title}"></h1>
+            <p class="lead" th:text="#{home.registered.user.body}"></p>
+            <hr class="my-4">
+            <p th:text="#{home.registered.user.subscription.info}"></p>
+            <p class="lead">
+                <a class="btn btn-success" role="button" th:href="@{/user-subscription}">
+                    <span th:text="#{btn.watch.subscription}"></span>
+                    <i class="mx-1 bi bi-youtube"></i>
+                </a>
+            </p>
+        </div>
+    </section>
+
+    <section th:each="type,item : ${contents}" th:if="${type.value.size > 0}">
+        <div class="container-fluid">
+            <div class="ms-2 ps-4">
+                <h5 class="px-5" th:text="#{${type.key}}"></h5>
+            </div>
+            <div class="carousel carousel-dark slide" th:id="|grupo-${item.index}|">
+                <div class="carousel-inner">
+                    <div th:each="group, iter : ${type.value}">
+                        <div class="carousel-item" th:classappend="${iter.first ? 'active' : ''}">
+                            <div class="card-group px-5">
+                                <div class="card card-over" th:each="content : ${group}">
+                                    <a th:href="@{content-detail/{id}(id=${content.id})}">
+                                        <img alt="" class="card-img-top img-adjusted" referrerpolicy="no-referrer"
+                                             th:src="${content.cover}">
+                                    </a>
+                                </div>
+                                <div class="card card-hidden" th:if="${group.size < 2}"></div>
+                                <div class="card card-hidden" th:if="${group.size < 3}"></div>
+                                <div class="card card-hidden" th:if="${group.size < 4}"></div>
+                                <div class="card card-hidden" th:if="${group.size < 5}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" data-bs-slide="prev" th:data-bs-target="|#grupo-${item.index}|"
+                        type="button">
+                    <span aria-hidden="true" class="carousel-control-prev bi bi-arrow-left-circle-fill h1"></span>
+                    <span class="visually-hidden" th:text="#{carousel.previous}"></span>
+                </button>
+                <button class="carousel-control-next" data-bs-slide="next" th:data-bs-target="|#grupo-${item.index}|"
+                        type="button">
+                    <span aria-hidden="true" class="carousel-control-next bi bi-arrow-right-circle-fill h1"></span>
+                    <span class="visually-hidden" th:text="#{carousel.next}"></span>
+                </button>
+            </div>
+        </div>
+        <div class="mt-5" th:if="${item.index < item.size - 1}"></div>
+    </section>
+    <section class="p-sm-3" id="logo">
+        <div class="row justify-content-center pt-2">
+            <div class="col-md-6 col-md-offset-3 py-3">
+                <img alt="logo" class="mx-auto d-block" height="100" th:src="@{/img/logo.png}"/>
+            </div>
+        </div>
+    </section>
+
+    <!-- Log out modal -->
+    <div th:replace="fragments/header::modal-logout"></div>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+
+</html>

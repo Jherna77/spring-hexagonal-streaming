@@ -1,0 +1,138 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-admin"></header>
+<main id="main">
+    <section class="px-sm-3 bg-gradient-reverse" id="title">
+        <div class="container-lg">
+            <h2 class="m-4 text-center" th:text="#{app.users}"></h2>
+        </div>
+        <hr class="m-0 p-0">
+    </section>
+
+    <section id="users">
+        <div class="container-lg pt-lg-4">
+            <div class="row-cols-1">
+                <div class="col-md-12 table-responsive card">
+                    <table class="table table-striped table-hover table-dark">
+                        <thead>
+                        <tr>
+                            <th class="btn-primary text-white" th:text="#{app.id}"/>
+                            <th class="btn-primary text-white" th:text="#{user.first}"/>
+                            <th class="btn-primary text-white" th:text="#{user.last}"/>
+                            <th class="btn-primary text-white" th:text="#{user.email}"/>
+                            <th class="btn-primary text-white" th:text="#{user.role}"/>
+                            <th class="btn-primary text-white text-end">
+                                <form class="m-0" method="post" th:action="@{/}">
+                                    <div class="btn-group" role="group">
+                                        <button class="form-control btn btn-success btn-sm bi bi-pencil-square"
+                                                id="create" th:formaction="@{/admin-user/create}" type="submit">
+                                        </button>
+                                        <button class="form-control btn btn-danger btn-sm bi bi-database-fill-x"
+                                                data-bs-target="#confirm-drop" data-bs-toggle="modal" type="button">
+                                        </button>
+                                    </div>
+
+                                    <!-- Confirm delete user -->
+                                    <div aria-hidden="true" aria-labelledby="label-drop"
+                                         class="modal fade text-start" data-bs-backdrop="static"
+                                         data-bs-keyboard="true" id="confirm-drop" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="label-drop"
+                                                        th:text="#{modal.confirm.user.delete.title}"></h5>
+                                                    <button aria-label="Close" class="btn-close"
+                                                            data-bs-dismiss="modal" type="button"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p th:text="#{modal.confirm.user.drop.body}"></p>
+                                                    <p th:text="#{modal.confirm.user.drop.info}"></p>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-success" id="drop" name="id"
+                                                                th:formaction="@{/admin-users/delete}"
+                                                                th:text="#{btn.confirm}" type="submit"/>
+                                                        <button class="btn btn-outline-light" data-bs-dismiss="modal"
+                                                                th:text="#{btn.cancel}" type="button"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.firstName}"></td>
+                            <td th:text="${user.lastName}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="#{${user.role.tag}}"></td>
+                            <td class="text-end">
+                                <form class="m-0" method="post" th:action="@{/}"
+                                      th:hidden="${user.id == 0 or user.email == #authentication.principal.username}"
+                                      th:object="${user}">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary btn-sm bi bi-pencil-square"
+                                                id="edit" name="id" th:formaction="@{/admin-user/edit}"
+                                                th:value="${user.id}" type="submit">
+                                        </button>
+                                        <button class="form-control btn btn-danger btn-sm bi bi-x-circle-fill"
+                                                data-bs-toggle="modal"
+                                                th:data-bs-target="|#confirm-delete-${user.id}|" type="button">
+                                        </button>
+                                    </div>
+
+                                    <!-- Confirm delete user -->
+                                    <div aria-hidden="true" aria-labelledby="label-delete"
+                                         class="modal fade text-start" data-bs-backdrop="static"
+                                         data-bs-keyboard="true" tabindex="-1"
+                                         th:id="|confirm-delete-${user.id}|">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="label-delete"
+                                                        th:text="#{modal.confirm.user.delete.title}"></h5>
+                                                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                                            type="button"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p th:text="#{modal.confirm.user.delete.body}"></p>
+                                                    <p th:text="#{modal.confirm.user.delete.info}"></p>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-success" id="delete" name="id"
+                                                                th:formaction="@{/admin-user/delete}"
+                                                                th:text="#{btn.confirm}"
+                                                                th:value="${user.id}" type="submit"/>
+                                                        <button class="btn btn-outline-light" data-bs-dismiss="modal"
+                                                                th:text="#{btn.cancel}" type="button"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Log out modal -->
+    <div th:replace="fragments/header::modal-logout"></div>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

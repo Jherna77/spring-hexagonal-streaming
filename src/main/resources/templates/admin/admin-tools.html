@@ -1,0 +1,189 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-admin"></header>
+<main id="main">
+    <section class="px-sm-3 bg-gradient-reverse" id="title">
+        <div class="container-lg">
+            <h2 class="m-4 text-center" th:text="#{app.backups}"></h2>
+        </div>
+        <hr class="m-0 p-0">
+    </section>
+
+    <section id="backups">
+        <div class="container-lg pt-lg-4">
+            <div class="row-cols-1">
+                <div class="col-md-12 table-responsive card">
+                    <table class="table table-striped table-hover table-dark">
+                        <thead>
+                        <tr>
+                            <th class="btn-primary text-white" th:text="#{app.id}"/>
+                            <th class="btn-primary text-white" th:text="#{app.user}"/>
+                            <th class="btn-primary text-white" th:text="#{app.perform}"/>
+                            <th class="btn-primary text-white" th:text="#{app.restore}"/>
+                            <th class="btn-primary text-white text-end">
+                                <form class="m-0" method="post" th:action="@{/}">
+                                    <div class="btn-group" role="group">
+                                        <button class="form-control btn btn-success btn-sm bi bi-database-fill-add"
+                                                data-bs-target="#confirm-perform" data-bs-toggle="modal" type="button">
+                                        </button>
+                                        <button class="form-control btn btn-danger btn-sm bi bi-database-fill-x"
+                                                data-bs-target="#confirm-drop" data-bs-toggle="modal" type="button">
+                                        </button>
+                                    </div>
+
+                                    <!-- Confirm perform backup -->
+                                    <div aria-hidden="true" aria-labelledby="label-perform"
+                                         class="modal fade text-start" data-bs-backdrop="static"
+                                         data-bs-keyboard="true" id="confirm-perform" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="label-perform"
+                                                        th:text="#{modal.confirm.backup.perform.title}"></h5>
+                                                    <button aria-label="Close" class="btn-close"
+                                                            data-bs-dismiss="modal" type="button"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p th:text="#{modal.confirm.backup.perform.body}"></p>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-success" id="perform" name="id"
+                                                                th:formaction="@{/admin-backup/perform}"
+                                                                th:text="#{btn.confirm}" type="submit"/>
+                                                        <button class="btn btn-outline-light" data-bs-dismiss="modal"
+                                                                th:text="#{btn.cancel}" type="button"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Confirm delete backups -->
+                                    <div aria-hidden="true" aria-labelledby="label-drop"
+                                         class="modal fade text-start" data-bs-backdrop="static"
+                                         data-bs-keyboard="true" id="confirm-drop" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="label-drop"
+                                                        th:text="#{modal.confirm.backup.drop.title}"></h5>
+                                                    <button aria-label="Close" class="btn-close"
+                                                            data-bs-dismiss="modal" type="button"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p th:text="#{modal.confirm.backup.drop.body}"></p>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-success" id="drop" name="id"
+                                                                th:formaction="@{/admin-backups/delete}"
+                                                                th:text="#{btn.confirm}" type="submit"/>
+                                                        <button class="btn btn-outline-light" data-bs-dismiss="modal"
+                                                                th:text="#{btn.cancel}" type="button"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="backup : ${backups}">
+                            <td th:text="${backup.id}"></td>
+                            <td th:text="${backup.user}"></td>
+                            <td th:text="${#temporals.format(backup.perform, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                            <td th:if="${backup.restore == null}" th:text="#{app.never}"></td>
+                            <td th:text="${#temporals.format(backup.restore, 'dd-MM-yyyy HH:mm:ss')}"
+                                th:unless="${backup.restore == null}"></td>
+                            <td class="text-end">
+                                <form class="m-0" method="post" th:action="@{/}">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary btn-sm bi bi-database-fill-gear"
+                                                data-bs-toggle="modal"
+                                                th:data-bs-target="|#confirm-restore-${backup.id}|" type="button">
+                                        </button>
+                                        <button class="form-control btn btn-danger btn-sm bi bi-x-circle-fill"
+                                                data-bs-toggle="modal"
+                                                th:data-bs-target="|#confirm-delete-${backup.id}|" type="button">
+                                        </button>
+                                    </div>
+
+                                    <!-- Confirm restore backup -->
+                                    <div aria-hidden="true" aria-labelledby="label-restore"
+                                         class="modal fade text-start" data-bs-backdrop="static"
+                                         data-bs-keyboard="true" tabindex="-1"
+                                         th:id="|confirm-restore-${backup.id}|">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="label-restore"
+                                                        th:text="#{modal.confirm.backup.restore.title}"></h5>
+                                                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                                            type="button"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p th:text="#{modal.confirm.backup.restore.body}"></p>
+                                                    <p th:text="#{modal.confirm.backup.restore.info}"></p>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-success" id="restore" name="id"
+                                                                th:formaction="@{/admin-backup/restore}"
+                                                                th:text="#{btn.confirm}"
+                                                                th:value="${backup.id}" type="submit"/>
+                                                        <button class="btn btn-outline-light" data-bs-dismiss="modal"
+                                                                th:text="#{btn.cancel}" type="button"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Confirm delete backup -->
+                                    <div aria-hidden="true" aria-labelledby="label-delete"
+                                         class="modal fade text-start" data-bs-backdrop="static"
+                                         data-bs-keyboard="true" tabindex="-1"
+                                         th:id="|confirm-delete-${backup.id}|">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="label-delete"
+                                                        th:text="#{modal.confirm.backup.delete.title}"></h5>
+                                                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                                            type="button"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p th:text="#{modal.confirm.backup.delete.body}"></p>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-success" id="delete" name="id"
+                                                                th:formaction="@{/admin-backup/delete}"
+                                                                th:text="#{btn.confirm}"
+                                                                th:value="${backup.id}" type="submit"/>
+                                                        <button class="btn btn-outline-light" data-bs-dismiss="modal"
+                                                                th:text="#{btn.cancel}" type="button"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Log out modal -->
+    <div th:replace="fragments/header::modal-logout"></div>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

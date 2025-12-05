@@ -1,0 +1,83 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-content"></header>
+<main id="main">
+    <section class="pt-sm-4" id="start">
+        <div class="content-lg bg-gradient-reverse">
+            <form method="post" name="form-filter" novalidate
+                  th:action="@{/content-type/{id}/filter(id=${id})}" th:object="${filter}">
+                <div class="row mx-lg-5">
+                    <div class="col-lg-auto h3">
+                        <span th:text="${type}"></span>
+                    </div>
+                    <div class="col-lg-auto">
+                        <select class="form-control" id="genres" th:field="*{selectedGenre}">
+                            <option selected th:text="#{content.all.genres}" value="0"></option>
+                            <hr>
+                            <option th:each="genre : ${genres}" th:text="${genre.name}"
+                                    th:value="${genre.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-lg-auto">
+                        <select class="form-control" id="directors" th:field="*{selectedDirector}">
+                            <option selected th:text="#{content.all.directors}" value="0"></option>
+                            <hr>
+                            <option th:each="director : ${directors}" th:text="${director.name}"
+                                    th:value="${director.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-lg-auto">
+                        <select class="form-control" id="actors" th:field="*{selectedActor}">
+                            <option selected th:text="#{content.all.actors}" value="0"></option>
+                            <hr>
+                            <option th:each="actor : ${actors}" th:text="${actor.name}"
+                                    th:value="${actor.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="form-label visually-hidden" for="title" th:text="#{content.title}"></label>
+                        <div class="input-group mb-2">
+                            <span class="input-group-text" id="inputGroupTitle" th:text="#{content.title}"></span>
+                            <input aria-describedby="inputGroupTitle" autofocus class="form-control"
+                                   id="title" name="title" th:field="*{title}" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 btn-group pe-lg-3" role="group">
+                        <button class="form-control btn btn-success bi bi-search h5" id="submit" name="submit"
+                                type="submit" value="plan"></button>
+                        <button class="form-control btn btn-outline-secondary bi bi-feather h5" id="cancel"
+                                name="cancel"
+                                type="submit"></button>
+                    </div>
+                </div>
+            </form>
+            <hr>
+        </div>
+    </section>
+    <section class="p-sm-3 m-sm-4" id="contents">
+        <div class="container-fluid">
+            <div class="row g-3">
+                <div class="col-lg-3" th:each="content : ${content}">
+                    <a th:href="@{/content-detail/{id}(id=${content.id})}">
+                        <img alt="" class="card-img-top img-adjusted" referrerpolicy="no-referrer"
+                             th:src="${content.cover}">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Log out modal -->
+    <div th:replace="fragments/header::modal-logout"></div>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

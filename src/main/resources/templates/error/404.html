@@ -1,0 +1,35 @@
+<html data-bs-theme="dark" lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-default"></header>
+<main>
+    <section class="bg-gradient">
+        <div class="container-lg pt-sm-5">
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <h1 class="text-center" th:text="#{error.404.title}"/>
+                    <img alt="logo" class="mx-auto img-fluid" style="max-width: 960px;"
+                         th:src="@{/img/404.png}"/>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-auto pt-4">
+                    <h4 class="text-center" th:text="#{error.404.body}"/>
+                    <h4 class="text-center" th:text="#{error.404.info}"/>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-auto pt-3 col-sm-4">
+                    <a class="btn btn-outline-light me-2" th:href="@{/}"
+                       th:text="#{btn.back.home}" type="button"/>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

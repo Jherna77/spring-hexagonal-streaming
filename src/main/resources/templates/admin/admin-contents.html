@@ -1,0 +1,137 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-admin"></header>
+<main id="main">
+    <section class="px-sm-3 bg-gradient-reverse" id="title">
+        <div class="container-lg">
+            <h2 class="m-4 text-center" th:text="#{app.contents}"></h2>
+        </div>
+        <hr class="m-0 p-0">
+    </section>
+
+    <section id="contents">
+        <div class="container-lg pt-lg-4">
+            <div class="row-cols-1">
+                <div class="col-md-12 table-responsive-lg card">
+                    <table class="table table-striped table-hover table-dark">
+                        <thead>
+                        <tr>
+                            <th class="btn-primary text-white" th:text="#{app.id}"/>
+                            <th class="btn-primary text-white" th:text="#{content.title}"/>
+                            <th class="btn-primary text-white" th:text="#{content.type}"/>
+                            <th class="btn-primary text-white" th:text="#{content.feature}"/>
+                            <th class="btn-primary text-white" th:text="#{app.date}"/>
+                            <th class="btn-primary text-white text-end">
+                                <form class="m-0" method="post" th:action="@{/}">
+                                    <div class="btn-group" role="group">
+                                        <button class="form-control btn btn-success btn-sm bi bi-pencil-square"
+                                                id="create" th:formaction="@{/admin-content/create}" type="submit">
+                                        </button>
+                                        <button class="form-control btn btn-danger btn-sm bi bi-database-fill-x"
+                                                data-bs-target="#confirm-drop" data-bs-toggle="modal" type="button">
+                                        </button>
+                                    </div>
+
+                                    <!-- Confirm delete content -->
+                                    <div aria-hidden="true" aria-labelledby="label-drop"
+                                         class="modal fade text-start" data-bs-backdrop="static"
+                                         data-bs-keyboard="true" id="confirm-drop" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="label-drop"
+                                                        th:text="#{modal.confirm.content.delete.title}"></h5>
+                                                    <button aria-label="Close" class="btn-close"
+                                                            data-bs-dismiss="modal" type="button"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p th:text="#{modal.confirm.content.drop.body}"></p>
+                                                    <p th:text="#{modal.confirm.content.drop.info}"></p>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-success" id="drop" name="id"
+                                                                th:formaction="@{/admin-contents/delete}"
+                                                                th:text="#{btn.confirm}" type="submit"/>
+                                                        <button class="btn btn-outline-light" data-bs-dismiss="modal"
+                                                                th:text="#{btn.cancel}" type="button"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="content : ${contents}">
+                            <td th:text="${content.id}"></td>
+                            <td th:text="${content.title}"></td>
+                            <td th:text="${content.type.name}"></td>
+                            <td th:text="${content.feature.name}"></td>
+                            <td th:text="${#temporals.format(content.added, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                            <td class="text-end">
+                                <form class="m-0" method="post" th:action="@{/}"
+                                      th:object="${content}">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary btn-sm bi bi-pencil-square"
+                                                id="edit" name="id" th:formaction="@{/admin-content/edit}"
+                                                th:value="${content.id}" type="submit">
+                                        </button>
+                                        <button class="form-control btn btn-danger btn-sm bi bi-x-circle-fill"
+                                                data-bs-toggle="modal"
+                                                th:data-bs-target="|#confirm-delete-${content.id}|" type="button">
+                                        </button>
+                                    </div>
+
+                                    <!-- Confirm delete content -->
+                                    <div aria-hidden="true" aria-labelledby="label-delete"
+                                         class="modal fade text-start" data-bs-backdrop="static"
+                                         data-bs-keyboard="true" tabindex="-1"
+                                         th:id="|confirm-delete-${content.id}|">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="label-delete"
+                                                        th:text="#{modal.confirm.content.delete.title}"></h5>
+                                                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                                            type="button"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p th:text="#{modal.confirm.content.delete.body}"></p>
+                                                    <p th:text="#{modal.confirm.content.delete.info}"></p>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-success" id="delete" name="id"
+                                                                th:formaction="@{/admin-content/delete}"
+                                                                th:text="#{btn.confirm}"
+                                                                th:value="${content.id}" type="submit"/>
+                                                        <button class="btn btn-outline-light" data-bs-dismiss="modal"
+                                                                th:text="#{btn.cancel}" type="button"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Log out modal -->
+    <div th:replace="fragments/header::modal-logout"></div>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

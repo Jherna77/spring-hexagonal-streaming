@@ -1,0 +1,192 @@
+<html data-bs-theme="dark" lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header-css">
+    <title th:text="#{app.title}"></title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header::header-default"></header>
+<main id="main">
+    <section class="p-sm-3" id="user">
+        <div class="container-lg">
+            <h2 class="m-4 text-center" th:text="#{sign.up.title}"></h2>
+            <p class="text-center"><small class="text-muted" th:text="#{sign.up.user.fill.details}"></small></p>
+            <hr>
+            <form class="needs-validation" method="post" novalidate
+                  th:action="@{/signup-user}" th:object="${user}">
+
+                <!-- Registration form -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label visually-hidden" for="email" th:text="#{user.email}"></label>
+                        <div class="input-group has-validation mb-2">
+                            <span class="input-group-text" id="inputGroupEmail" th:text="#{user.email}"></span>
+                            <input aria-describedby="inputGroupEmail" autofocus
+                                   class="form-control" id="email" name="email"
+                                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                                   required th:value="*{email}" type="email">
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle"></i>
+                                <span th:text="#{sign.up.email}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label visually-hidden" for="password" th:text="#{user.password}"></label>
+                        <div class="input-group has-validation mb-2">
+                            <span class="input-group-text" id="inputGroupPassword" th:text="#{user.password}"></span>
+                            <input aria-describedby="inputGroupPassword" class="form-control"
+                                   id="password" name="password" pattern=".{8,}" required
+                                   th:value="*{password}" type="password">
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle"></i>
+                                <span th:text="#{sign.up.password}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label visually-hidden" for="firstName" th:text="#{user.first}"></label>
+                        <div class="input-group has-validation mb-2">
+                            <span class="input-group-text" id="inputGroupFirstName" th:text="#{user.first}"></span>
+                            <input aria-describedby="inputGroupFirstName" class="form-control"
+                                   id="firstName" name="firstName" required
+                                   th:value="*{firstName}" type="text">
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle"></i>
+                                <span th:text="#{sign.up.name}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label visually-hidden" for="lastName" th:text="#{user.last}"></label>
+                        <div class="input-group has-validation mb-2">
+                            <span class="input-group-text" id="inputGroupLastName" th:text="#{user.last}"></span>
+                            <input aria-describedby="inputGroupLastName" class="form-control"
+                                   id="lastName" name="lastName" required
+                                   th:value="*{lastName}" type="text">
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle"></i>
+                                <span th:text="#{sign.up.last}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label visually-hidden" for="phone" th:text="#{user.phone}"></label>
+                        <div class="input-group has-validation mb-2">
+                            <span class="input-group-text" id="inputGroupPhone" th:text="#{user.phone}"></span>
+                            <input aria-describedby="inputGroupPhone" class="form-control"
+                                   id="phone" name="phone" pattern=".{9,}" required
+                                   th:value="*{phone}" type="text">
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle"></i>
+                                <span th:text="#{sign.up.phone}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label visually-hidden" for="address" th:text="#{user.address}"></label>
+                        <div class="input-group has-validation mb-2">
+                            <span class="input-group-text" id="inputGroupAddress" th:text="#{user.address}"></span>
+                            <input aria-describedby="inputGroupAddress" class="form-control"
+                                   id="address" name="address" required
+                                   th:value="*{address}" type="text">
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle"></i>
+                                <span th:text="#{sign.up.address}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label visually-hidden" for="postalCode" th:text="#{user.postal.code}"/>
+                        <div class="input-group has-validation mb-2">
+                            <span class="input-group-text" id="inputGroupPostal" th:text="#{user.postal.code}"/>
+                            <input aria-describedby="inputGroupPostal" class="form-control"
+                                   id="postalCode" name="postalCode" pattern="^\s*?\d{5}(?:[-\s]\d{4})?\s*?$" required
+                                   th:value="*{postalCode}" type="text">
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle"></i>
+                                <span th:text="#{sign.up.postal.code}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label visually-hidden" for="city" th:text="#{user.city}"></label>
+                        <div class="input-group has-validation mb-2">
+                            <span class="input-group-text" id="inputGroupCity" th:text="#{user.city}"></span>
+                            <input aria-describedby="inputGroupCity" class="form-control"
+                                   id="city" name="city" required
+                                   th:value="*{city}" type="text">
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle"></i>
+                                <span th:text="#{sign.up.city}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label visually-hidden" for="province" th:text="#{user.province}"></label>
+                        <div class="input-group has-validation mb-2">
+                            <span class="input-group-text" id="inputGroupProvince" th:text="#{user.province}"></span>
+                            <input aria-describedby="inputGroupProvince" class="form-control"
+                                   id="province" name="province" required
+                                   th:value="*{province}" type="text">
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle"></i>
+                                <span th:text="#{sign.up.province}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label visually-hidden" for="country" th:text="#{user.country}"></label>
+                        <div class="input-group has-validation mb-2">
+                            <span class="input-group-text" id="inputGroupCountry" th:text="#{user.country}"></span>
+                            <input aria-describedby="inputGroupCountry" class="form-control"
+                                   id="country" name="country" required
+                                   th:value="*{country}" type="text">
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle"></i>
+                                <span th:text="#{sign.up.country}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accept terms -->
+                    <hr>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" id="invalidCheck" required type="checkbox" value="">
+                            <label class="form-check-label" for="invalidCheck"><small
+                                    th:text="#{sign.up.accept}"/></label>
+                            <div class="invalid-feedback">
+                                <i class="bi-exclamation-circle" th:text="' '+ #{sign.up.accept.unchecked}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- email exists message -->
+                    <div th:if="${param.emailexists}">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <span th:text="#{sign.up.email.exists}"></span>
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="alert"
+                                    type="button"></button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <input class="form-control btn btn-success" id="submit"
+                               name="submit" th:value="#{btn.continue}" type="submit"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+</main>
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>
